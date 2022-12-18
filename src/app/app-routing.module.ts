@@ -1,7 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { OktaAuthGuard, OktaCallbackComponent } from '@okta/okta-angular';
+import { ProfileComponent } from './profile/profile.component';
 
-const routes: Routes = [];
+
+const routes: Routes = [
+  { path: 'login/callback', component: OktaCallbackComponent },
+  {
+    path: 'protected',
+    loadChildren: () => import('./protected/protected.module').then(m => m.ProtectedModule),
+    canLoad: [OktaAuthGuard]
+  },
+  { path: 'profile', component: ProfileComponent , canActivate: [OktaAuthGuard] }
+
+
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
